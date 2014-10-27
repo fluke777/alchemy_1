@@ -22,8 +22,8 @@
    (pig/map (fn [line] (select-keys line headers)))))
 
 
-(def joined (let [tickets (load-csv headers-tickets "/Users/tomassvarovsky/Desktop/tomas/10_tickets.csv")
-                  coupons (load-csv headers-coupons "/Users/tomassvarovsky/Desktop/tomas/10_coupons.csv")
+(def joined (let [tickets (load-csv headers-tickets "../10_tickets.csv")
+                  coupons (load-csv headers-coupons "../10_coupons.csv")
                   projected-tickets (->> tickets (project [:ITIN_ID :COUPONS :ITIN_FARE :DISTANCE]))
                   projected-coupons (->> coupons (project [:ITIN_ID :MKT_ID :SEQ_NUM :ORIGIN :DEST :YEAR :QUARTER]))]
               (->> (pig/join [(projected-tickets :on :ITIN_ID)
@@ -36,5 +36,3 @@
                         (->> (fold/map :ORIGIN) (fold/first))
                         (->> (fold/map :DEST) (fold/first)))})
      pig/dump)
-
-
